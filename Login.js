@@ -6,28 +6,49 @@ import {
   View,
   Image,
   TextInput,
-  TouchableHighlight
+  TouchableHighlight,
+  ActivityIndicator
 } from 'react-native';
 import Octocat from './assets/Octocat.png'
 
 export default class Login extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showProgress: false
+    }
+  }
+
   render() {
     return(
       <View style={styles.container}>
         <Image style={styles.logo}
           source={Octocat} />
-        <Text style={styles.heading}>Github Browser</Text>
+        <Text style={styles.heading}>Github Browsersss</Text>
         <TextInput style={styles.input}
           placeholder='Github username'
+          onChangeText={text => this.setState({username: text})}
+          underlineColorAndroid="transparent"
         />
         <TextInput style={styles.input}
           placeholder='Github password'
+          onChangeText={text => this.setState({password: text})}
+          secureTextEntry={true}
         />
-      <TouchableHighlight style={styles.button}>
-        <Text style={styles.buttonText}>Log In</Text>
-      </TouchableHighlight>
+        <TouchableHighlight style={styles.button}
+          onPress={this.onLoginPressed.bind(this)}>
+          <Text style={styles.buttonText}>Log In</Text>
+        </TouchableHighlight>
+        <ActivityIndicator
+          animating={this.state.showProgress}
+          size='large'
+          style={styles.loader} />
       </View>
     );
+  }
+
+  onLoginPressed() {
+    this.setState({showProgress: true});
   }
 }
 
@@ -53,7 +74,8 @@ const styles = StyleSheet.create({
     padding: 4,
     fontSize: 18,
     borderWidth: 1,
-    borderColor: '#48bbec'
+    borderColor: '#48bbec',
+    alignSelf: 'stretch'
   },
   button: {
     height: 50,
@@ -66,5 +88,8 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: '#fff',
     alignSelf: 'center'
+  },
+  loader: {
+    marginTop: 40
   }
 });
