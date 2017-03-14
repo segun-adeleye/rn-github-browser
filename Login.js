@@ -9,8 +9,8 @@ import {
   TouchableHighlight,
   ActivityIndicator
 } from 'react-native';
-import Octocat from './assets/Octocat.png'
-import buffer, { Buffer } from 'buffer'
+import Octocat from './assets/Octocat.png';
+import authService from './AuthService';
 
 export default class Login extends Component {
   constructor(props) {
@@ -63,36 +63,17 @@ export default class Login extends Component {
 
   onLoginPressed() {
     this.setState({showProgress: true});
-    let b = new Buffer(this.state.username + ':' + this.state.password);
-    let encodedAuth = b.toString('base64');
+    authService.login({
+      username: this.state.username,
+      password: this.state.password
+    }, results => {
+      this.setState(Object.assign({
+        showProgress: false
+      }, results));
 
-    fetch('https://api.github.com/user', {
-      headers: {
-        'Authorization': 'Basic ' + encodedAuth
+      if (this.state.success && this.props.onLogin) {
+        this.props.onLogin();
       }
-    })
-    .then(response => {
-      if (response.status >= 200 && response.status < 300) {
-        return response
-      }
-      throw {
-        badCredentials: response.status == '401',
-        unknownError: response.status != '401'
-      }
-    })
-    .then(response => {
-      return response.json()
-    })
-    .then(results => {
-      console.log(results);
-      this.setState({success: true});
-    })
-    .catch(err => {
-      console.log(err);
-      this.setState(err);
-    })
-    .finally(() => {
-      this.setState({showProgress: false});
     });
   }
 }
