@@ -10,6 +10,7 @@ import {
   ActivityIndicator
 } from 'react-native';
 import Octocat from './assets/Octocat.png'
+import buffer, { Buffer } from 'buffer'
 
 export default class Login extends Component {
   constructor(props) {
@@ -20,6 +21,18 @@ export default class Login extends Component {
   }
 
   render() {
+    let errorCtrl = <View />
+    if (!this.state.success && this.state.badCredentials) {
+      errorCtrl = <Text style={styles.error}>
+        Username or password is incorrect
+      </Text>
+    }
+
+    if (!this.state.success && this.state.unknownError) {
+      errorCtrl = <Text style={styles.error}>
+        Ops!!! We are looking right into this ASAP!!!
+      </Text>
+    }
     return(
       <View style={styles.container}>
         <Image style={styles.logo}
@@ -39,6 +52,7 @@ export default class Login extends Component {
           onPress={this.onLoginPressed.bind(this)}>
           <Text style={styles.buttonText}>Log In</Text>
         </TouchableHighlight>
+        { errorCtrl }
         <ActivityIndicator
           animating={this.state.showProgress}
           size='large'
@@ -49,6 +63,37 @@ export default class Login extends Component {
 
   onLoginPressed() {
     this.setState({showProgress: true});
+    let b = new Buffer(this.state.username + ':' + this.state.password);
+    let encodedAuth = b.toString('base64');
+
+    fetch('https://api.github.com/user', {
+      headers: {
+        'Authorization': 'Basic ' + encodedAuth
+      }
+    })
+    .then(response => {
+      if (response.status >= 200 && response.status < 300) {
+        return response
+      }
+      throw {
+        badCredentials: response.status == '401',
+        unknownError: response.status != '401'
+      }
+    })
+    .then(response => {
+      return response.json()
+    })
+    .then(results => {
+      console.log(results);
+      this.setState({success: true});
+    })
+    .catch(err => {
+      console.log(err);
+      this.setState(err);
+    })
+    .finally(() => {
+      this.setState({showProgress: false});
+    });
   }
 }
 
@@ -91,5 +136,9 @@ const styles = StyleSheet.create({
   },
   loader: {
     marginTop: 40
+  },
+  error: {
+    color: 'red',
+    paddingTop: 10
   }
 });
