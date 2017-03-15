@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 
 import Login from './Login';
+import AppContainer from './AppContainer';
 
 export default class GithubBrowser extends Component {
   constructor(props) {
@@ -25,9 +26,7 @@ export default class GithubBrowser extends Component {
   render() {
     if (this.state.isLoggedIn) {
       return (
-        <View style={styles.container}>
-          <Text style={styles.welcome}>Welcome! You are logged in</Text>
-        </View>
+        <AppContainer />
       );
     } else {
       return (
