@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
@@ -9,6 +8,7 @@ import {
 
 import Octocat from './assets/Octocat.png';
 import authService from './AuthService';
+import Feed from './Feed';
 
 export default class AppContainer extends Component {
   constructor(props) {
@@ -27,7 +27,7 @@ export default class AppContainer extends Component {
           icon={require('./assets/inbox.png')}
           onPress={() => this.setState({selectedTab: 'feed'})}
         >
-          <Text style={styles.welcome}>Tab 1</Text>
+          <Feed />
         </TabBarIOS.Item>
         <TabBarIOS.Item
           title='Search'

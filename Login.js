@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-  AppRegistry,
   StyleSheet,
   Text,
   View,
@@ -35,8 +34,7 @@ export default class Login extends Component {
     }
     return(
       <View style={styles.container}>
-        <Image style={styles.logo}
-          source={Octocat} />
+        <Image style={styles.logo} source={Octocat} />
         <Text style={styles.heading}>Github Browsersss</Text>
         <TextInput style={styles.input}
           placeholder='Github username'
