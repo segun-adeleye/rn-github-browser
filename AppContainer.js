@@ -3,7 +3,8 @@ import {
   StyleSheet,
   Text,
   View,
-  TabBarIOS
+  TabBarIOS,
+  NavigatorIOS
 } from 'react-native';
 
 import Octocat from './assets/Octocat.png';
@@ -27,7 +28,14 @@ export default class AppContainer extends Component {
           icon={require('./assets/inbox.png')}
           onPress={() => this.setState({selectedTab: 'feed'})}
         >
-          <Feed />
+          <NavigatorIOS style={{
+              flex: 1
+            }}
+            initialRoute={{
+              component: Feed,
+              title: 'Feed'
+            }}>
+          </NavigatorIOS>
         </TabBarIOS.Item>
         <TabBarIOS.Item
           title='Search'
