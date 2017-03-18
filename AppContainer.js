@@ -10,6 +10,7 @@ import {
 import Octocat from './assets/Octocat.png';
 import authService from './AuthService';
 import Feed from './Feed';
+import Search from './Search';
 
 export default class AppContainer extends Component {
   constructor(props) {
@@ -43,7 +44,14 @@ export default class AppContainer extends Component {
           icon={require('./assets/search.png')}
           onPress={() => this.setState({selectedTab: 'search'})}
         >
-          <Text style={styles.welcome}>Tab 2</Text>
+          <NavigatorIOS style={{
+              flex: 1
+            }}
+            initialRoute={{
+              component: Search,
+              title: 'Search'
+            }}
+          />
         </TabBarIOS.Item>
       </TabBarIOS>
     );

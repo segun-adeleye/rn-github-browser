@@ -8,6 +8,7 @@ import {
   TouchableHighlight,
   ActivityIndicator
 } from 'react-native';
+
 import Octocat from './assets/Octocat.png';
 import authService from './AuthService';
 
